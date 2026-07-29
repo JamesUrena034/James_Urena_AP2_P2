@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import edu.ucne.james_urena_ap2_p2.presentation.form.GastoFormScreen
+import edu.ucne.james_urena_ap2_p2.presentation.edit.GastoEditScreen
 import edu.ucne.james_urena_ap2_p2.presentation.list.GastoListScreen
 
 @Composable
@@ -26,13 +26,15 @@ fun AppNavigationDisplay() {
                 )
             }
             entry<Screen.GastoCreate> {
-                GastoFormScreen(
+                GastoEditScreen(
+                    gastoId = 0,
                     onSaved = { backStack.removeLastOrNull() },
                     onBack = { backStack.removeLastOrNull() }
                 )
             }
             entry<Screen.GastoEdit> { key ->
-                GastoFormScreen(
+                GastoEditScreen(
+                    gastoId = key.id,
                     onSaved = { backStack.removeLastOrNull() },
                     onBack = { backStack.removeLastOrNull() }
                 )
