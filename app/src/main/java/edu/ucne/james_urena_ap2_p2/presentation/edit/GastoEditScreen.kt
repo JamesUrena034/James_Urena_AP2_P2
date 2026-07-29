@@ -1,4 +1,4 @@
-package edu.ucne.james_urena_ap2_p2.presentation.form
+package edu.ucne.james_urena_ap2_p2.presentation.edit
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,12 +17,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
-fun GastoFormScreen(
-    viewModel: GastoFormViewModel = hiltViewModel(),
+fun GastoEditScreen(
+    gastoId: Int,
+    viewModel: GastoEditViewModel = hiltViewModel(),
     onSaved: () -> Unit,
     onBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(gastoId) {
+        viewModel.init(gastoId)
+    }
 
     LaunchedEffect(state.isSaved) {
         if (state.isSaved) {
@@ -30,7 +35,7 @@ fun GastoFormScreen(
         }
     }
 
-    GastoFormBodyScreen(
+    GastoEditBodyScreen(
         state = state,
         onEvent = viewModel::onEvent,
         onBack = onBack
@@ -39,9 +44,9 @@ fun GastoFormScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GastoFormBodyScreen(
-    state: GastoFormUiState,
-    onEvent: (GastoFormUiEvent) -> Unit,
+fun GastoEditBodyScreen(
+    state: GastoEditUiState,
+    onEvent: (GastoEditUiEvent) -> Unit,
     onBack: () -> Unit
 ) {
     Scaffold(
@@ -65,7 +70,7 @@ fun GastoFormBodyScreen(
         ) {
             OutlinedTextField(
                 value = state.fecha,
-                onValueChange = { onEvent(GastoFormUiEvent.FechaChanged(it)) },
+                onValueChange = { onEvent(GastoEditUiEvent.FechaChanged(it)) },
                 label = { Text("Fecha") },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -74,7 +79,7 @@ fun GastoFormBodyScreen(
 
             OutlinedTextField(
                 value = state.suplidor,
-                onValueChange = { onEvent(GastoFormUiEvent.SuplidorChanged(it)) },
+                onValueChange = { onEvent(GastoEditUiEvent.SuplidorChanged(it)) },
                 label = { Text("Suplidor") },
                 isError = state.suplidorError != null,
                 supportingText = {
@@ -87,7 +92,7 @@ fun GastoFormBodyScreen(
 
             OutlinedTextField(
                 value = state.ncf,
-                onValueChange = { onEvent(GastoFormUiEvent.NcfChanged(it)) },
+                onValueChange = { onEvent(GastoEditUiEvent.NcfChanged(it)) },
                 label = { Text("NCF") },
                 modifier = Modifier.fillMaxWidth()
             )
@@ -96,7 +101,7 @@ fun GastoFormBodyScreen(
 
             OutlinedTextField(
                 value = state.itbis,
-                onValueChange = { onEvent(GastoFormUiEvent.ItbisChanged(it)) },
+                onValueChange = { onEvent(GastoEditUiEvent.ItbisChanged(it)) },
                 label = { Text("ITBIS") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 modifier = Modifier.fillMaxWidth()
@@ -106,7 +111,7 @@ fun GastoFormBodyScreen(
 
             OutlinedTextField(
                 value = state.monto,
-                onValueChange = { onEvent(GastoFormUiEvent.MontoChanged(it)) },
+                onValueChange = { onEvent(GastoEditUiEvent.MontoChanged(it)) },
                 label = { Text("Monto") },
                 isError = state.montoError != null,
                 supportingText = {
@@ -127,7 +132,7 @@ fun GastoFormBodyScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Button(
-                onClick = { onEvent(GastoFormUiEvent.Save) },
+                onClick = { onEvent(GastoEditUiEvent.Save) },
                 modifier = Modifier.fillMaxWidth(),
                 enabled = !state.isLoading
             ) {
